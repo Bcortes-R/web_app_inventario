@@ -1,0 +1,5 @@
+.venv/
+.qodo/
+.vscode/
+__pycache__/
+.git/

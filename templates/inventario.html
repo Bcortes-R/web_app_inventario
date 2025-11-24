@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario de Equipos</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }
+        h1 { color: #333; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background-color: white; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background-color: #007bff; color: white; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        .estado-operativo { 
+            padding: 3px 8px; border-radius: 4px; font-weight: bold; 
+            text-transform: uppercase; font-size: 0.8em;
+        }
+        .operativo { background-color: #d4edda; color: #155724; }
+        .mantenimiento { background-color: #fff3cd; color: #856404; }
+        .baja, .dañado { background-color: #f8d7da; color: #721c24; }
+        .otro { background-color: #e2e3e5; color: #383d41; }
+        .btn-editar { background-color: #ffc107; color: black; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; text-decoration: none; display: inline-block; margin-right: 5px; }
+        .btn-eliminar { background-color: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>📋 Inventario General de Equipos</h1>
+    
+    <p><a href="{{ url_for('inventario.crear_equipo') }}" style="background-color: green; color: white; padding: 8px 15px; text-decoration: none; border-radius: 4px;">➕ Agregar Nuevo Equipo</a></p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Serial</th>
+                <th>Marca/Modelo</th>
+                <th>Estado</th>
+                <th>Categoría</th>
+                <th>Departamento</th>
+                <th>Fecha Compra</th>
+                <th>Acciones</th> 
+            </tr>
+        </thead>
+        <tbody>
+            {% for equipo in equipos %}
+            <tr>
+                <td>{{ equipo.id_equipo }}</td>
+                <td><strong>{{ equipo.serial }}</strong></td>
+                <td>{{ equipo.marca }} / {{ equipo.modelo }}</td>
+                <td>
+                    <span class="estado-operativo {{ equipo.estado_operativo }}">
+                        {{ equipo.estado_operativo }}
+                    </span>
+                </td>
+                <td>{{ equipo.categoria.nombre }}</td>
+                <td>{{ equipo.departamento.nombre if equipo.departamento else 'N/A' }}</td>
+                <td>{{ equipo.fecha_compra.strftime('%Y-%m-%d') if equipo.fecha_compra else 'N/A' }}</td>
+                
+                <td>
+                    <a href="{{ url_for('inventario.editar_equipo', id_equipo=equipo.id_equipo) }}" class="btn-editar">Editar</a>
+                    
+                    <form method="POST" action="{{ url_for('inventario.eliminar_equipo', id_equipo=equipo.id_equipo) }}" 
+                        style="display: inline;" 
+                        onsubmit="return confirm('¿Estás seguro de que quieres eliminar el equipo {{ equipo.serial }}? Esta acción es irreversible.');">
+                        <button type="submit" class="btn-eliminar">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="8">No se encontraron equipos en el inventario.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
