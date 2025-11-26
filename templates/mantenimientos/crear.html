@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow border-warning">
+            <div class="card-header bg-warning text-dark">
+                <h4 class="mb-0">🛠️ Registrar Mantenimiento / Falla</h4>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    ℹ️ Al guardar, el equipo cambiará automáticamente a estado <strong>"Mantenimiento"</strong>.
+                </div>
+
+                <form method="POST">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="fw-bold">Equipo Afectado (*)</label>
+                            <select name="equipo" class="form-select" required>
+                                <option value="">Seleccione...</option>
+                                {% for e in equipos %}
+                                    <option value="{{ e.id_equipo }}">{{ e.serial }} - {{ e.modelo }} ({{ e.estado_operativo }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="fw-bold">Fecha Ingreso</label>
+                            <input type="date" name="fecha" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="fw-bold">Tipo de Mantenimiento</label>
+                            <select name="tipo" class="form-select">
+                                <option value="preventivo">Preventivo (Limpieza, revisión)</option>
+                                <option value="correctivo">Correctivo (Reparación, cambio piezas)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>Técnico Encargado</label>
+                            <select name="tecnico" class="form-select">
+                                <option value="">-- Sin asignar --</option>
+                                {% for t in tecnicos %}
+                                    <option value="{{ t.id_tecnico }}">{{ t.nombre }} ({{ t.especialidad }})</option>
+                                {% endfor %}
+                            </select>
+                            {% if not tecnicos %}
+                                <small class="text-danger">⚠ No hay técnicos registrados en la BD.</small>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="fw-bold">Descripción del Trabajo / Falla</label>
+                        <textarea name="descripcion" class="form-control" rows="3" placeholder="Ej: Cambio de disco duro por fallo en sectores..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-warning w-100 fw-bold">Registrar y Enviar a Taller</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

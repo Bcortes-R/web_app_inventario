@@ -1,91 +1,83 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Editar Equipo {{ equipo.serial }}</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }
-        .form-container { background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); max-width: 600px; margin: auto; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; font-weight: bold; margin-bottom: 5px; }
-        input[type="text"], input[type="date"], select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        button { background-color: #ffc107; color: black; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
-        button:hover { background-color: #e0a800; }
-        .error { color: red; margin-bottom: 15px; border: 1px solid red; padding: 10px; background-color: #f8d7da; border-radius: 4px; }
-    </style>
-</head>
-<body>
-    <div class="form-container">
-        <h1>✏️ Editar Equipo: {{ equipo.serial }}</h1>
-        
-        {% if error %}
-            <p class="error">¡Error de actualización! {{ error }}</p>
-        {% endif %}
+{% extends 'base.html' %}
 
-        <form method="POST" action="{{ url_for('inventario.editar_equipo', id_equipo=equipo.id_equipo) }}">
-            
-            <div class="form-group">
-                <label for="serial">Serial (*)</label>
-                <input type="text" id="serial" name="serial" value="{{ equipo.serial }}" required>
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow">
+            <div class="card-header bg-warning text-dark">
+                <h4 class="mb-0">✏️ Editar Equipo: {{ equipo.serial }}</h4>
             </div>
-            
-            <div class="form-group">
-                <label for="marca">Marca</label>
-                <input type="text" id="marca" name="marca" value="{{ equipo.marca or '' }}">
-            </div>
-            
-            <div class="form-group">
-                <label for="modelo">Modelo</label>
-                <input type="text" id="modelo" name="modelo" value="{{ equipo.modelo or '' }}">
-            </div>
+            <div class="card-body">
+                
+                {% if error %}
+                    <div class="alert alert-danger">{{ error }}</div>
+                {% endif %}
 
-            <div class="form-group">
-                <label for="categoria">Categoría (*)</label>
-                <select id="categoria" name="categoria" required>
-                    {% for cat in categorias %}
-                        <option value="{{ cat.id_categoria }}" 
-                                {% if cat.id_categoria == equipo.id_categoria %}selected{% endif %}>
-                            {{ cat.nombre }}
-                        </option>
-                    {% endfor %}
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label for="departamento">Departamento</label>
-                <select id="departamento" name="departamento">
-                    <option value="">-- Sin Departamento --</option> 
-                    {% for dpto in departamentos %}
-                        <option value="{{ dpto.id_dpto }}" 
-                                {% if dpto.id_dpto == equipo.id_dpto %}selected{% endif %}>
-                            {{ dpto.nombre }}
-                        </option>
-                    {% endfor %}
-                </select>
-            </div>
+                <form method="POST">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Serial (*)</label>
+                            <input type="text" name="serial" class="form-control" value="{{ equipo.serial }}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Marca</label>
+                            <input type="text" name="marca" class="form-control" value="{{ equipo.marca or '' }}">
+                        </div>
+                    </div>
 
-            <div class="form-group">
-                <label for="estado">Estado Operativo</label>
-                <select id="estado" name="estado">
-                    {% for est in estados %}
-                        <option value="{{ est }}" 
-                                {% if est == equipo.estado_operativo %}selected{% endif %}>
-                            {{ est | capitalize }}
-                        </option>
-                    {% endfor %}
-                </select>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Modelo</label>
+                            <input type="text" name="modelo" class="form-control" value="{{ equipo.modelo or '' }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Categoría (*)</label>
+                            <select name="categoria" class="form-select" required>
+                                {% for cat in categorias %}
+                                    <option value="{{ cat.id_categoria }}" {% if cat.id_categoria == equipo.id_categoria %}selected{% endif %}>
+                                        {{ cat.nombre }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Departamento</label>
+                            <select name="departamento" class="form-select">
+                                <option value="">-- Sin Asignar --</option>
+                                {% for dpto in departamentos %}
+                                    <option value="{{ dpto.id_dpto }}" {% if dpto.id_dpto == equipo.id_dpto %}selected{% endif %}>
+                                        {{ dpto.nombre }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Estado</label>
+                            <select name="estado" class="form-select">
+                                {% for est in estados %}
+                                    <option value="{{ est }}" {% if est == equipo.estado_operativo %}selected{% endif %}>
+                                        {{ est | capitalize }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Fecha de Compra</label>
+                        <input type="date" name="fecha_compra" class="form-control" value="{{ equipo.fecha_compra.strftime('%Y-%m-%d') if equipo.fecha_compra else '' }}">
+                    </div>
+
+                    <div class="d-flex justify-content-end">
+                        <a href="{{ url_for('inventario.listar_equipos') }}" class="btn btn-secondary me-2">Cancelar</a>
+                        <button type="submit" class="btn btn-warning px-4">Guardar Cambios</button>
+                    </div>
+                </form>
             </div>
-
-            <div class="form-group">
-                <label for="fecha_compra">Fecha de Compra</label>
-                <input type="date" id="fecha_compra" name="fecha_compra" 
-                       value="{{ equipo.fecha_compra.strftime('%Y-%m-%d') if equipo.fecha_compra else '' }}">
-            </div>
-
-            <button type="submit">Guardar Cambios</button>
-            <a href="{{ url_for('inventario.listar_equipos') }}" style="color: #333; margin-left: 10px;">Cancelar</a>
-
-        </form>
+        </div>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}

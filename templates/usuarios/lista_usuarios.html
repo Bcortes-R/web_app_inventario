@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>👥 Gestión de Usuarios</h2>
+    <a href="{{ url_for('usuarios.crear_usuario') }}" class="btn btn-primary">
+        👤 Nuevo Usuario
+    </a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body p-0">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Documento</th>
+                    <th>Email</th>
+                    <th>Rol</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for u in usuarios %}
+                <tr>
+                    <td class="fw-bold">{{ u.nombre }}</td>
+                    <td>{{ u.doc_ident }}</td>
+                    <td>{{ u.email }}</td>
+                    <td>
+                        {% if u.rol == 'admin' %}
+                            <span class="badge bg-danger">Administrador</span>
+                        {% elif u.rol == 'tecnico' %}
+                            <span class="badge bg-info text-dark">Técnico</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Usuario</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-center">
+                        <form method="POST" action="{{ url_for('usuarios.eliminar_usuario', id_usuario=u.id_usuario) }}" onsubmit="return confirm('¿Eliminar a {{ u.nombre }}?');">
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="5" class="text-center py-3">No hay otros usuarios registrados.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between mb-4">
+    <h2>🛠️ Historial de Mantenimientos</h2>
+    <a href="{{ url_for('mantenimientos.nuevo_mantenimiento') }}" class="btn btn-warning text-dark"> Registrar Mantenimiento </a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Fecha</th>
+                    <th>Equipo</th>
+                    <th>Tipo</th>
+                    <th>Técnico</th>
+                    <th>Descripción</th>
+                    <th>Estado Actual</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for m in historial %}
+                <tr>
+                    <td>{{ m.fecha_mnto }}</td>
+                    <td>
+                        <strong>{{ m.equipo.serial }}</strong><br>
+                        <small>{{ m.equipo.modelo }}</small>
+                    </td>
+                    <td>
+                        {% if m.tipo == 'preventivo' %}
+                            <span class="badge bg-info text-dark">Preventivo</span>
+                        {% else %}
+                            <span class="badge bg-danger">Correctivo</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ m.tecnico.nombre if m.tecnico else 'Sin asignar' }}</td>
+                    <td>{{ m.descripcion }}</td>
+                    <td>
+                        {% if m.equipo.estado_operativo == 'mantenimiento' %}
+                            <span class="badge bg-warning text-dark">En Taller</span>
+                        {% else %}
+                            <span class="badge bg-success">Operativo</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if m.equipo.estado_operativo == 'mantenimiento' %}
+                        <form method="POST" action="{{ url_for('mantenimientos.finalizar_mantenimiento', id_equipo=m.equipo.id_equipo) }}" onsubmit="return confirm('¿El equipo ya está reparado y listo para operar?');">
+                            <button type="submit" class="btn btn-sm btn-outline-success">✅ Finalizar</button>
+                        </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="7" class="text-center">No hay registros de mantenimiento.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

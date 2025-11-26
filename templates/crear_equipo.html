@@ -1,81 +1,78 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Crear Nuevo Equipo</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }
-        .form-container { background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); max-width: 600px; margin: auto; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; font-weight: bold; margin-bottom: 5px; }
-        input[type="text"], input[type="date"], select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        button { background-color: #007bff; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
-        button:hover { background-color: #0056b3; }
-        .error { color: red; margin-bottom: 15px; border: 1px solid red; padding: 10px; background-color: #f8d7da; border-radius: 4px; }
-    </style>
-</head>
-<body>
-    <div class="form-container">
-        <h1>➕ Registrar Nuevo Equipo</h1>
-        
-        {% if error %}
-            <p class="error">¡Error de registro! {{ error }}</p>
-        {% endif %}
+{% extends 'base.html' %}
 
-        <form method="POST">
-            
-            <div class="form-group">
-                <label for="serial">Serial (*)</label>
-                <input type="text" id="serial" name="serial" required>
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0">➕ Registrar Nuevo Equipo</h4>
             </div>
-            
-            <div class="form-group">
-                <label for="marca">Marca</label>
-                <input type="text" id="marca" name="marca">
-            </div>
-            
-            <div class="form-group">
-                <label for="modelo">Modelo</label>
-                <input type="text" id="modelo" name="modelo">
-            </div>
+            <div class="card-body">
+                
+                {% if error %}
+                    <div class="alert alert-danger">{{ error }}</div>
+                {% endif %}
 
-            <div class="form-group">
-                <label for="categoria">Categoría (*)</label>
-                <select id="categoria" name="categoria" required>
-                    {% for cat in categorias %}
-                        <option value="{{ cat.id_categoria }}">{{ cat.nombre }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label for="departamento">Departamento</label>
-                <select id="departamento" name="departamento">
-                    <option value="">-- Sin Departamento --</option> 
-                    {% for dpto in departamentos %}
-                        <option value="{{ dpto.id_dpto }}">{{ dpto.nombre }}</option>
-                    {% endfor %}
-                </select>
-            </div>
+                <form method="POST">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Serial (*)</label>
+                            <input type="text" name="serial" class="form-control" required placeholder="Ej: SN-12345">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Marca</label>
+                            <input type="text" name="marca" class="form-control" placeholder="Ej: Dell">
+                        </div>
+                    </div>
 
-            <div class="form-group">
-                <label for="estado">Estado Operativo</label>
-                <select id="estado" name="estado">
-                    {% for est in estados %}
-                        <option value="{{ est }}">{{ est | capitalize }}</option>
-                    {% endfor %}
-                </select>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Modelo</label>
+                            <input type="text" name="modelo" class="form-control" placeholder="Ej: Latitude 5420">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Categoría (*)</label>
+                            <select name="categoria" class="form-select" required>
+                                <option value="" selected disabled>Seleccione...</option>
+                                {% for cat in categorias %}
+                                    <option value="{{ cat.id_categoria }}">{{ cat.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Departamento</label>
+                            <select name="departamento" class="form-select">
+                                <option value="">-- Sin Asignar --</option>
+                                {% for dpto in departamentos %}
+                                    <option value="{{ dpto.id_dpto }}">{{ dpto.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Estado</label>
+                            <select name="estado" class="form-select">
+                                {% for est in estados %}
+                                    <option value="{{ est }}">{{ est | capitalize }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Fecha de Compra</label>
+                        <input type="date" name="fecha_compra" class="form-control">
+                    </div>
+
+                    <div class="d-flex justify-content-end">
+                        <a href="{{ url_for('inventario.listar_equipos') }}" class="btn btn-secondary me-2">Cancelar</a>
+                        <button type="submit" class="btn btn-success px-4">Guardar Equipo</button>
+                    </div>
+                </form>
             </div>
-
-            <div class="form-group">
-                <label for="fecha_compra">Fecha de Compra</label>
-                <input type="date" id="fecha_compra" name="fecha_compra">
-            </div>
-
-            <button type="submit">Guardar Equipo</button>
-            <a href="{{ url_for('inventario.listar_equipos') }}" style="color: #333; margin-left: 10px;">Cancelar</a>
-
-        </form>
+        </div>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}

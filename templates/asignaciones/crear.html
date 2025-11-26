@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4>🤝 Asignar Equipo a Usuario</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="fw-bold">Seleccionar Equipo (*)</label>
+                        <select name="equipo" class="form-select" required>
+                            <option value="">-- Equipos Disponibles --</option>
+                            {% for e in equipos %}
+                                <option value="{{ e.id_equipo }}">{{ e.serial }} - {{ e.modelo }}</option>
+                            {% endfor %}
+                        </select>
+                        <small class="text-muted">Solo se muestran equipos operativos y sin asignar.</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="fw-bold">Usuario Responsable (*)</label>
+                        <select name="usuario" class="form-select" required>
+                            <option value="">-- Seleccionar Usuario --</option>
+                            {% for u in usuarios %}
+                                <option value="{{ u.id_usuario }}">{{ u.nombre }} ({{ u.rol }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label>Observaciones</label>
+                        <textarea name="observaciones" class="form-control" rows="3"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Registrar Asignación</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

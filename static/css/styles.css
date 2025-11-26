@@ -1,0 +1,42 @@
+/* static/css/styles.css */
+
+/* Fondo general suave */
+body {
+    background-color: #f7f7f7;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Efecto para las tarjetas del Dashboard */
+.card-stats {
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: default;
+}
+
+.card-stats:hover {
+    transform: translateY(-5px);
+    /* Se mueve un poco hacia arriba */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    /* Sombra más pronunciada */
+}
+
+/* Estilos para el Login */
+.login-card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.login-header {
+    border-radius: 10px 10px 0 0 !important;
+    font-weight: bold;
+}
+
+/* Tablas personalizadas */
+.table-hover tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+.badge-estado {
+    font-size: 0.9em;
+    padding: 5px 10px;
+}

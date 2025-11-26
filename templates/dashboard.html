@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="mb-4 text-center">
+    <h2 class="display-6">Bienvenido al Panel de Control</h2>
+    <p class="text-muted">Resumen del estado actual del inventario</p>
+</div>
+
+<div class="row text-center">
+    <div class="col-md-4 mb-3">
+        <div class="card text-white bg-primary h-100 card-stats">
+            <div class="card-header fw-bold">Total Equipos</div>
+            <div class="card-body d-flex align-items-center justify-content-center">
+                <h1 class="display-3 fw-bold">{{ total }}</h1>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-3">
+        <div class="card text-dark bg-warning h-100 card-stats">
+            <div class="card-header fw-bold">En Mantenimiento</div>
+            <div class="card-body d-flex align-items-center justify-content-center">
+                <h1 class="display-3 fw-bold">{{ mant }}</h1>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-3">
+        <div class="card text-white bg-danger h-100 card-stats">
+            <div class="card-header fw-bold">Dados de Baja</div>
+            <div class="card-body d-flex align-items-center justify-content-center">
+                <h1 class="display-3 fw-bold">{{ baja }}</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if current_user.rol == 'admin' %}
+<div class="alert alert-info mt-4 d-flex align-items-center">
+    <span class="fs-4 me-2">👮</span>
+    <div>
+        <strong>Modo Administrador:</strong> Tienes acceso completo para gestionar usuarios y configuraciones avanzadas.
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

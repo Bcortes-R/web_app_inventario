@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between mb-4">
+    <h2>🤝 Equipos Prestados Actualmente</h2>
+    <a href="{{ url_for('asignaciones.nueva_asignacion') }}" class="btn btn-primary">➕ Nueva Asignación</a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Equipo</th>
+                    <th>Usuario Responsable</th>
+                    <th>Fecha Préstamo</th>
+                    <th>Observaciones</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for a in asignaciones %}
+                <tr>
+                    <td>
+                        <strong>{{ a.equipo.serial }}</strong><br>
+                        <small>{{ a.equipo.modelo }}</small>
+                    </td>
+                    <td>{{ a.usuario.nombre }}<br><small class="text-muted">{{ a.usuario.doc_ident }}</small></td>
+                    <td>{{ a.fecha_asign }}</td>
+                    <td>{{ a.observaciones or '-' }}</td>
+                    <td>
+                        <form method="POST" action="{{ url_for('asignaciones.devolver_equipo', id_asignacion=a.id_asignacion) }}" onsubmit="return confirm('¿Confirmar devolución?');">
+                            <button type="submit" class="btn btn-sm btn-outline-success">📥 Devolver</button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="5" class="text-center">No hay equipos prestados.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
