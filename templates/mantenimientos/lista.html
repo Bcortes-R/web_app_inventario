@@ -1,13 +1,21 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="d-flex justify-content-between mb-4">
-    <h2>🛠️ Historial de Mantenimientos</h2>
-    <a href="{{ url_for('mantenimientos.nuevo_mantenimiento') }}" class="btn btn-warning text-dark"> Registrar Mantenimiento </a>
+<div class="row align-items-center mb-3">
+    <div class="col-md-6">
+        <h2>🛠️ Historial de Mantenimientos</h2>
+    </div>
+    <div class="col-md-6 d-flex gap-2 justify-content-end">
+        <input type="text" id="searchMnto" class="form-control" placeholder="Buscar por serial, técnico...">
+        
+        <a href="{{ url_for('mantenimientos.nuevo_mantenimiento') }}" class="btn btn-warning text-dark text-nowrap">
+            ➕ Registrar
+        </a>
+    </div>
 </div>
 
 <div class="card shadow-sm">
-    <div class="card-body">
-        <table class="table table-hover align-middle">
+    <div class="card-body p-0">
+        <table class="table table-hover align-middle mb-0">
             <thead class="table-light">
                 <tr>
                     <th>Fecha</th>
@@ -21,11 +29,11 @@
             </thead>
             <tbody>
                 {% for m in historial %}
-                <tr>
+                <tr class="fila-dato">
                     <td>{{ m.fecha_mnto }}</td>
                     <td>
                         <strong>{{ m.equipo.serial }}</strong><br>
-                        <small>{{ m.equipo.modelo }}</small>
+                        <small class="text-muted">{{ m.equipo.modelo }}</small>
                     </td>
                     <td>
                         {% if m.tipo == 'preventivo' %}
@@ -45,17 +53,39 @@
                     </td>
                     <td>
                         {% if m.equipo.estado_operativo == 'mantenimiento' %}
-                        <form method="POST" action="{{ url_for('mantenimientos.finalizar_mantenimiento', id_equipo=m.equipo.id_equipo) }}" onsubmit="return confirm('¿El equipo ya está reparado y listo para operar?');">
+                        <form method="POST" action="{{ url_for('mantenimientos.finalizar_mantenimiento', id_equipo=m.equipo.id_equipo) }}" onsubmit="return confirm('¿El equipo ya está reparado?');">
                             <button type="submit" class="btn btn-sm btn-outline-success">✅ Finalizar</button>
                         </form>
                         {% endif %}
                     </td>
                 </tr>
                 {% else %}
-                <tr><td colspan="7" class="text-center">No hay registros de mantenimiento.</td></tr>
+                <tr><td colspan="7" class="text-center py-4">No hay registros de mantenimiento.</td></tr>
                 {% endfor %}
+                <tr id="noMatchRow" style="display: none;">
+                    <td colspan="7" class="text-center py-4 text-muted">No se encontraron coincidencias.</td>
+                </tr>
             </tbody>
         </table>
     </div>
 </div>
+
+<script>
+    document.getElementById('searchMnto').addEventListener('keyup', function() {
+        let filtro = this.value.toLowerCase();
+        let filas = document.querySelectorAll('.fila-dato');
+        let hayResultados = false;
+
+        filas.forEach(function(fila) {
+            if (fila.innerText.toLowerCase().includes(filtro)) {
+                fila.style.display = '';
+                hayResultados = true;
+            } else {
+                fila.style.display = 'none';
+            }
+        });
+
+        document.getElementById('noMatchRow').style.display = hayResultados ? 'none' : '';
+    });
+</script>
 {% endblock %}

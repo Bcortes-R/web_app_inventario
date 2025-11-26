@@ -1,47 +1,164 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="mb-4 text-center">
-    <h2 class="display-6">Bienvenido al Panel de Control</h2>
-    <p class="text-muted">Resumen del estado actual del inventario</p>
-</div>
 
-<div class="row text-center">
-    <div class="col-md-4 mb-3">
-        <div class="card text-white bg-primary h-100 card-stats">
-            <div class="card-header fw-bold">Total Equipos</div>
-            <div class="card-body d-flex align-items-center justify-content-center">
-                <h1 class="display-3 fw-bold">{{ total }}</h1>
-            </div>
-        </div>
+<div class="app-page-title d-flex align-items-center mb-4 rounded bg-white shadow-sm p-4">
+    <div class="page-title-icon">
+        <i class="bi bi-speedometer2"></i>
     </div>
-    
-    <div class="col-md-4 mb-3">
-        <div class="card text-dark bg-warning h-100 card-stats">
-            <div class="card-header fw-bold">En Mantenimiento</div>
-            <div class="card-body d-flex align-items-center justify-content-center">
-                <h1 class="display-3 fw-bold">{{ mant }}</h1>
-            </div>
-        </div>
-    </div>
-    
-    <div class="col-md-4 mb-3">
-        <div class="card text-white bg-danger h-100 card-stats">
-            <div class="card-header fw-bold">Dados de Baja</div>
-            <div class="card-body d-flex align-items-center justify-content-center">
-                <h1 class="display-3 fw-bold">{{ baja }}</h1>
-            </div>
-        </div>
-    </div>
-</div>
-
-{% if current_user.rol == 'admin' %}
-<div class="alert alert-info mt-4 d-flex align-items-center">
-    <span class="fs-4 me-2">👮</span>
     <div>
-        <strong>Modo Administrador:</strong> Tienes acceso completo para gestionar usuarios y configuraciones avanzadas.
+        <h4 class="mb-0 fw-bold text-dark"> Dashboard General</h4>
+        <div class="text-muted small"> Resumen general del estado del inventario en tiempo real.</div>
     </div>
 </div>
-{% endif %}
 
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card mb-3 widget-content bg-midnight-bloom">
+            <div class="widget-content-wrapper text-white">
+                <div class="widget-content-left">
+                    <div class="widget-heading">Total Equipos </div>
+                    <div class="widget-subheading"> &nbsp; Inventario completo </div>
+                </div>
+                <div class="widget-content-right">
+                    <div class="widget-numbers text-white"><span>{{ total }}</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card mb-3 widget-content bg-arielle-smile">
+            <div class="widget-content-wrapper text-white">
+                <div class="widget-content-left">
+                    <div class="widget-heading"> En Taller </div>
+                    <div class="widget-subheading"> &nbsp; Mantenimientos activos </div>
+                </div>
+                <div class="widget-content-right">
+                    <div class="widget-numbers text-white"><span>{{ mant }}</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card mb-3 widget-content bg-love-kiss">
+            <div class="widget-content-wrapper text-white">
+                <div class="widget-content-left">
+                    <div class="widget-heading"> De Baja </div>
+                    <div class="widget-subheading"> &nbsp; Equipos retirados </div>
+                </div>
+                <div class="widget-content-right">
+                    <div class="widget-numbers text-white"><span>{{ baja }}</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <i class="bi bi-pie-chart-fill me-2"></i> Estado del Inventario
+            </div>
+            <div class="card-body">
+                <canvas id="chartEstado"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <i class="bi bi-bar-chart-fill me-2"></i> Equipos por Marca
+            </div>
+            <div class="card-body">
+                <canvas id="chartMarca"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-5">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-graph-up-arrow me-2"></i> Evolución de Asignaciones
+            </div>
+            <div class="card-body">
+                <canvas id="chartLinea" height="80"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Configuraciones de gráficos (Misma lógica, colores ajustados al tema)
+    
+    // 1. Pastel
+    const ctx1 = document.getElementById('chartEstado').getContext('2d');
+    new Chart(ctx1, {
+        type: 'doughnut',
+        data: {
+            labels: {{ labels_estado | tojson }},
+            datasets: [{
+                data: {{ values_estado | tojson }},
+                backgroundColor: ['#3ac47d', '#f7b924', '#d92550', '#6c757d', '#16aaff'],
+                borderWidth: 0
+            }]
+        },
+        options: { responsive: true, cutout: '70%' } // Dona más delgada estilo moderno
+    });
+
+    // 2. Barras
+    const ctx2 = document.getElementById('chartMarca').getContext('2d');
+    new Chart(ctx2, {
+        type: 'bar',
+        data: {
+            labels: {{ labels_marca | tojson }},
+            datasets: [{
+                label: 'Equipos',
+                data: {{ values_marca | tojson }},
+                backgroundColor: '#3f6ad8',
+                borderRadius: 5
+            }]
+        },
+        options: { 
+            scales: { y: { beginAtZero: true, grid: { color: '#eee' } }, x: { grid: { display: false } } } 
+        }
+    });
+
+    // 3. Línea
+    const ctx3 = document.getElementById('chartLinea').getContext('2d');
+    new Chart(ctx3, {
+        type: 'line',
+        data: {
+            labels: {{ labels_fecha | tojson }},
+            datasets: [{
+                label: 'Asignaciones',
+                data: {{ values_fecha | tojson }},
+                borderColor: '#6f42c1',
+                backgroundColor: 'rgba(111, 66, 193, 0.1)',
+                tension: 0.4,
+                fill: true,
+                pointRadius: 4,
+                pointBackgroundColor: '#fff',
+                pointBorderColor: '#6f42c1'
+            }]
+        },
+        options: {
+            scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+        }
+    });
+</script>
+
+<style>
+    .widget-numbers {
+        font-weight: 700;
+        font-size: 2.5rem;
+        line-height: 1;
+    }
+</style>
 {% endblock %}

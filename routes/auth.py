@@ -13,6 +13,7 @@ def load_user(user_id):
 
 @auth_bp.route("/login", methods=["GET", "POST"])
 def login():
+    # Si ya está logueado, lo mandamos al dashboard
     if current_user.is_authenticated:
         return redirect(url_for("dashboard.home"))
 
@@ -22,11 +23,15 @@ def login():
 
         user = Usuario.query.filter_by(email=email).first()
 
+        # Verificamos credenciales
         if user and user.check_password(password):
             login_user(user)
+            # 🌟 AQUÍ ESTÁ EL CAMBIO: Mensaje de éxito 🌟
+            flash(f"¡Bienvenido de nuevo, {user.nombre}!", "success")
             return redirect(url_for("dashboard.home"))
         else:
-            flash("Email o contraseña incorrectos", "error")
+            # Mensaje de error (este ya lo tenías, pero ahora se verá con SweetAlert)
+            flash("Correo o contraseña incorrectos. Intenta de nuevo.", "error")
 
     return render_template("login.html")
 
@@ -35,4 +40,6 @@ def login():
 @login_required
 def logout():
     logout_user()
+    # 🌟 Mensaje de despedida 🌟
+    flash("Has cerrado sesión correctamente. ¡Hasta pronto!", "success")
     return redirect(url_for("auth.login"))

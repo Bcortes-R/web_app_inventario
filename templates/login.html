@@ -1,26 +1,38 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-4">
-        <div class="card login-card mt-5">
-            <div class="card-header login-header bg-primary text-white text-center py-3">
-                <h4 class="mb-0">🔐 Iniciar Sesión</h4>
-            </div>
-            <div class="card-body p-4">
+<div class="row justify-content-center align-items-center vh-100 mt-n5">
+    <div class="col-md-5 col-lg-4">
+        <div class="card shadow-lg border-0 rounded-lg login-card-modern">
+            <div class="card-body p-5 text-center">
+                
+                <div class="mb-4 login-icon-container">
+                    <i class="bi bi-person-circle display-1 text-primary"></i>
+                </div>
+
+                <h3 class="mb-4 fw-bold text-dark">Bienvenido</h3>
+                <p class="text-muted mb-4">Ingresa tus credenciales para acceder</p>
+
                 <form method="POST">
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Correo Electrónico</label>
-                        <input type="email" id="email" name="email" class="form-control" placeholder="ejemplo@empresa.com" required>
+                    <div class="form-floating mb-3">
+                        <input type="email" name="email" class="form-control" id="floatingInput" placeholder="name@example.com" required>
+                        <label for="floatingInput">Correo Electrónico</label>
                     </div>
-                    <div class="mb-4">
-                        <label for="password" class="form-label">Contraseña</label>
-                        <input type="password" id="password" name="password" class="form-control" placeholder="••••••" required>
+                    <div class="form-floating mb-4">
+                        <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Password" required>
+                        <label for="floatingPassword">Contraseña</label>
                     </div>
+
                     <div class="d-grid">
-                        <button type="submit" class="btn btn-primary btn-lg">Ingresar</button>
+                        <button type="submit" class="btn btn-primary btn-lg fw-bold btn-login-anim">
+                            INGRESAR <i class="bi bi-arrow-right-short"></i>
+                        </button>
                     </div>
                 </form>
+
+            </div>
+            <div class="card-footer text-center py-3 bg-light border-0 rounded-bottom">
+                <small class="text-muted">Sistema de Gestión de Inventario v1.0</small>
             </div>
         </div>
     </div>

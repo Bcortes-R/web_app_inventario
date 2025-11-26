@@ -1,42 +1,424 @@
-/* static/css/styles.css */
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap');
 
-/* Fondo general suave */
 body {
-    background-color: #f7f7f7;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Roboto', sans-serif;
+    background-color: #f1f4f6;
+    /* Fondo gris azulado típico de dashboards modernos */
+    color: #495057;
 }
 
-/* Efecto para las tarjetas del Dashboard */
-.card-stats {
-    transition: transform 0.2s, box-shadow 0.2s;
-    cursor: default;
+/* --- NAVBAR LLAMATIVO  --- */
+
+.navbar {
+    /* Fondo Degradado: De Violeta a Azul Eléctrico */
+    background: linear-gradient(to right, #6a11cb 0%, #2575fc 100%) !important;
+    box-shadow: 0 4px 20px rgba(37, 117, 252, 0.3);
+    /* Sombra brillante */
+    padding: 0.8rem 1rem;
+    /* Un poco más de espacio */
 }
 
-.card-stats:hover {
-    transform: translateY(-5px);
-    /* Se mueve un poco hacia arriba */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    /* Sombra más pronunciada */
+/* Marca (Logo) en Blanco */
+.navbar-brand {
+    color: #fff !important;
+    font-weight: 800;
+    /* Letra más gruesa */
+    font-size: 1.6rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* Estilos para el Login */
-.login-card {
-    border: none;
+/* Enlaces del menú */
+.nav-link {
+    color: rgba(255, 255, 255, 0.9) !important;
+    /* Blanco casi puro */
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.nav-link:hover {
+    color: #fff !important;
+    transform: translateY(-2px);
+    /* Efecto de elevación sutil */
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* Botón de Salir (Rojo brillante para contrastar con el azul) */
+.btn-outline-danger {
+    color: #fff !important;
+    border-color: rgba(255, 255, 255, 0.4) !important;
+    background: rgba(255, 0, 0, 0.1);
+}
+
+.btn-outline-danger:hover {
+    background-color: #ff4757 !important;
+    border-color: #ff4757 !important;
+}
+
+/* --- MENÚ HAMBURGUESA (MÓVIL) --- */
+@media (max-width: 991px) {
+
+    /* Estilo del botón hamburguesa */
+    .navbar-toggler {
+        border: 2px solid rgba(255, 255, 255, 0.5) !important;
+        padding: 5px 10px;
+        border-radius: 8px;
+        transition: transform 0.2s;
+    }
+
+    /* Efecto al tocar el botón */
+    .navbar-toggler:active {
+        transform: scale(0.95);
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Icono de las tres rayitas (blanco puro) */
+    .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 1)' stroke-width='3' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E") !important;
+    }
+
+    /* Fondo del menú desplegable en móvil */
+    .navbar-collapse {
+        background: rgba(0, 0, 0, 0.1);
+        /* Fondo sutil oscuro para separar */
+        margin-top: 10px;
+        border-radius: 10px;
+        padding: 10px;
+    }
+}
+
+.card-header {
+    background-color: transparent;
+    border-bottom: 1px solid rgba(0, 0, 0, .05);
+    padding: 1.25rem;
+    font-weight: 700;
+    color: #3f6ad8;
+    /* Títulos en azul */
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+}
+
+/* --- WIDGETS DE ESTADÍSTICAS --- */
+.widget-content {
+    padding: 1rem;
+    flex-direction: row;
+    align-items: center;
+    display: flex;
+}
+
+.widget-content-wrapper {
+    display: flex;
+    flex: 1;
+    position: relative;
+    align-items: center;
+}
+
+.widget-content-left {
+    align-items: center;
+    display: flex;
+}
+
+.widget-heading {
+    opacity: .8;
+    font-weight: 700;
+    font-size: 1.1rem;
+    /* Número grande */
+    display: block;
+}
+
+.widget-subheading {
+    opacity: .5;
+    font-size: 0.85rem;
+    /* Texto pequeño */
+    display: block;
+    margin-top: 0.2rem;
+}
+
+.widget-content-right {
+    margin-left: auto;
+    font-size: 2.5rem;
+    /* Icono grande a la derecha */
+    opacity: 0.2;
+    /* Icono sutil */
+}
+
+/* Colores de Widgets */
+.bg-arielle-smile {
+    background-image: linear-gradient(to top, #16a085 0%, #ac1ec9 100%) !important;
+    color: white;
+}
+
+.bg-midnight-bloom {
+    background-image: linear-gradient(-20deg, #2b5876 0%, #4e4376 100%) !important;
+    color: white;
+}
+
+.bg-grow-early {
+    background-image: linear-gradient(to top, #0ba360 0%, #3cba92 100%) !important;
+    color: white;
+}
+
+.bg-love-kiss {
+    background-image: linear-gradient(to top, #ff0844 0%, #ffb199 100%) !important;
+    color: white;
+}
+
+/* --- TABLAS  --- */
+.table-responsive {
     border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background: #fff;
+    padding: 0;
+    /* Sin padding interno para que la tabla toque los bordes */
 }
 
-.login-header {
-    border-radius: 10px 10px 0 0 !important;
-    font-weight: bold;
+.table thead th {
+    border-top: 0;
+    border-bottom-width: 1px;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    color: rgba(13, 27, 62, 0.7);
+    background-color: #fff;
+    padding: 1rem;
 }
 
-/* Tablas personalizadas */
-.table-hover tbody tr:hover {
-    background-color: #f1f1f1;
+.table td {
+    vertical-align: middle;
+    padding: 1rem;
+    color: #495057;
+    border-top: 1px solid #e9ecef;
 }
 
-.badge-estado {
-    font-size: 0.9em;
-    padding: 5px 10px;
+/* --- HEADER DE PÁGINA --- */
+.app-page-title {
+    padding: 30px;
+    /* CAMBIO AQUÍ: Quitamos el -30px y ponemos margin-top positivo */
+    margin: 10px 0 30px 0;
+    position: relative;
+    background: rgba(255, 255, 255, 0.6);
+    /* Un poco más visible */
+    border-radius: 15px;
+    /* Bordes redondeados */
+}
+
+.page-title-icon {
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    background: #fff;
+    box-shadow: 0 0.46875rem 2.1875rem rgba(4, 9, 20, 0.03), 0 0.9375rem 1.40625rem rgba(4, 9, 20, 0.03);
+    border-radius: 5px;
+    margin-right: 20px;
+    color: #3f6ad8;
+}
+/* 1. Botón EDITAR */
+.btn-warning {
+    background-color: #6c5ce7 !important;
+    /* Puse un morado moderno como ejemplo */
+    border-color: #6c5ce7 !important;
+    color: #fff !important;
+    /* Icono blanco */
+}
+
+.btn-warning:hover {
+    background-color: #5b4cc4 !important;
+    /* Un poco más oscuro al pasar el mouse */
+}
+
+/* 2. Botón ELIMINAR */
+.btn-danger {
+    background-color: #ff7675 !important;
+    /* Un rojo coral suave */
+    border-color: #ff7675 !important;
+    color: #fff !important;
+}
+
+.btn-danger:hover {
+    background-color: #d63031 !important;
+    /* Rojo más intenso al pasar el mouse */
+}
+/* 1. Scrollbar Personalizado (Más bonito que el gris por defecto) */
+.table-responsive::-webkit-scrollbar {
+    height: 8px;
+    /* Altura de la barra horizontal */
+}
+
+.table-responsive::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+    background: #d1d9e6;
+    /* Color azul grisáceo suave */
+    border-radius: 10px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+    background: #b0b8c5;
+}
+
+/* Ajustes específicos para pantallas menores a 768px (Tablets y Celulares) */
+
+@media (max-width: 768px) {
+
+    /* Reducir tamaño del encabezado de página para ganar espacio */
+    .app-page-title {
+        padding: 15px !important;
+        margin: 5px 0 20px 0 !important;
+        flex-direction: column;
+        /* Icono arriba, texto abajo */
+        text-align: center;
+    }
+
+    .page-title-icon {
+        margin-right: 0 !important;
+        margin-bottom: 10px;
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+    }
+
+    /* Ajustar tarjetas para que no tengan márgenes laterales en móvil */
+    .card {
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        /* Sombra más ligera */
+        margin-bottom: 15px;
+    }
+
+    .card-body {
+        padding: 15px;
+        /* Menos relleno interno */
+    }
+
+    /* TABLA: Hacer que el texto sea un poco más pequeño para ver más datos */
+    .table-responsive {
+        padding: 0;
+        border-radius: 0;
+        box-shadow: none;
+        background: transparent;
+    }
+
+    .table {
+        /* Forzar que la tabla mantenga su ancho para permitir scroll suave */
+        min-width: 800px;
+    }
+
+    .table thead th {
+        font-size: 11px;
+        /* Encabezados más pequeños */
+        padding: 10px;
+        white-space: nowrap;
+        /* Evita que el texto se parta en dos líneas */
+    }
+
+    .table tbody tr td {
+        font-size: 13px;
+        padding: 10px 8px;
+    }
+
+    /* Botones de acción un poco más compactos */
+    .btn-sm {
+        width: 30px;
+        height: 30px;
+        font-size: 12px;
+    }
+
+    /* Ajustar barra de búsqueda y botones superiores */
+    .row.align-items-center {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .col-md-3,
+    .col-md-5,
+    .col-md-4 {
+        width: 100%;
+        text-align: center;
+    }
+
+    .d-flex.justify-content-end {
+        justify-content: center !important;
+    }
+
+    /* El input de búsqueda ocupa todo el ancho */
+    #searchInput,
+    #searchUser,
+    #searchMnto,
+    #searchAsign {
+        width: 100%;
+    }
+}
+
+/* Fondo especial solo para la página de Login */
+.bg-login {
+    /* Degradado animado moderno */
+    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    height: 100vh;
+    /* Altura completa */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@keyframes gradientBG {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Tarjeta de Login */
+
+.login-card-modern {
+    background: rgba(255, 255, 255, 0.95);
+    /* Blanco casi opaco */
+    backdrop-filter: blur(10px);
+    /* Efecto vidrio borroso */
+    border-radius: 20px !important;
+    transform: translateY(-20px);
+    /* Un poco hacia arriba para centrar visualmente */
+}
+
+.login-icon-container i {
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    -webkit-background-clip: text; 
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+}
+
+/* Botón con animación al pasar el mouse */
+.btn-login-anim {
+    background: linear-gradient(to right, #6a11cb 0%, #2575fc 100%);
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.btn-login-anim:hover {
+    transform: scale(1.02);
+    box-shadow: 0 5px 15px rgba(37, 117, 252, 0.4);
+}
+
+/* Ajuste para que el contenedor no tenga padding en modo login */
+.bg-login .container {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+}
+
+/* Personalización de SweetAlert  */
+div:where(.swal2-container) h2:where(.swal2-title) {
+    font-family: 'Roboto', sans-serif !important;
+    color: #333 !important;
 }

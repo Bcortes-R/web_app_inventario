@@ -1,17 +1,23 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>👥 Gestión de Usuarios</h2>
-    <a href="{{ url_for('usuarios.crear_usuario') }}" class="btn btn-primary">
-        👤 Nuevo Usuario
-    </a>
+<div class="row align-items-center mb-3">
+    <div class="col-md-6">
+        <h2>👥 Gestión de Usuarios</h2>
+    </div>
+    <div class="col-md-6 d-flex gap-2 justify-content-end">
+        <input type="text" id="searchUser" class="form-control" placeholder="Buscar usuario, documento...">
+        
+        <a href="{{ url_for('usuarios.crear_usuario') }}" class="btn btn-primary text-nowrap">
+            👤 Nuevo
+        </a>
+    </div>
 </div>
 
 <div class="card shadow-sm">
     <div class="card-body p-0">
-        <table class="table table-hover align-middle mb-0">
-            <thead class="table-light">
+        <table class="table table-hover align-middle mb-0" id="tablaUsuarios">
+            <thead>
                 <tr>
                     <th>Nombre</th>
                     <th>Documento</th>
@@ -22,7 +28,7 @@
             </thead>
             <tbody>
                 {% for u in usuarios %}
-                <tr>
+                <tr class="fila-dato">
                     <td class="fw-bold">{{ u.nombre }}</td>
                     <td>{{ u.doc_ident }}</td>
                     <td>{{ u.email }}</td>
@@ -36,7 +42,7 @@
                         {% endif %}
                     </td>
                     <td class="text-center">
-                        <form method="POST" action="{{ url_for('usuarios.eliminar_usuario', id_usuario=u.id_usuario) }}" onsubmit="return confirm('¿Eliminar a {{ u.nombre }}?');">
+                        <form method="POST" action="{{ url_for('usuarios.eliminar_usuario', id_usuario=u.id_usuario) }}" method="POST" class="form-eliminar">
                             <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
                         </form>
                     </td>
@@ -44,8 +50,30 @@
                 {% else %}
                 <tr><td colspan="5" class="text-center py-3">No hay otros usuarios registrados.</td></tr>
                 {% endfor %}
+                <tr id="noMatchRow" style="display: none;">
+                    <td colspan="5" class="text-center py-4 text-muted">No se encontraron coincidencias.</td>
+                </tr>
             </tbody>
         </table>
     </div>
 </div>
+
+<script>
+    document.getElementById('searchUser').addEventListener('keyup', function() {
+        let filtro = this.value.toLowerCase();
+        let filas = document.querySelectorAll('.fila-dato');
+        let hayResultados = false;
+
+        filas.forEach(function(fila) {
+            if (fila.innerText.toLowerCase().includes(filtro)) {
+                fila.style.display = '';
+                hayResultados = true;
+            } else {
+                fila.style.display = 'none';
+            }
+        });
+
+        document.getElementById('noMatchRow').style.display = hayResultados ? 'none' : '';
+    });
+</script>
 {% endblock %}
