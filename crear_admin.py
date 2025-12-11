@@ -31,4 +31,4 @@ with app.app_context():
         print("   Email: admin@empresa.com")
         print("   Pass:  123456")
     else:
-        print("ℹ️ El usuario administrador ya existe. No se hicieron cambios.")
+        print("ℹ El usuario administrador ya existe. No se hicieron cambios.")
